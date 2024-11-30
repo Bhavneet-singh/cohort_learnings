@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <script>
+
+    let timeOut;
+
+    function debouncePopulatediv() {
+
+      clearTimeout(timeOut) ;
+      
+      timeOut = setTimeout(() => {
+        calculateInterest();
+      }, 100);
+
+    }
+   async function populatediv() {
+        const a = document.getElementById("firstNumber").value ;
+        const b = document.getElementById("secondNumber").value ;
+        // fetch(`http://localhost:3000/sum?a=${a}&b=${b}`)
+        // .then(function(response){
+        //         response.text()
+        //         .then(function(ans){
+        //             console.log(ans)
+        //             document.getElementById('finalSum').innerHTML = `Output is ${ans}` ; 
+        //         })
+        //     }
+        const response = await fetch(`http://localhost:3000/sum?a=${a}&b=${b}`);
+ 
+        const ans = await response.text();
+        console.log(ans);
+        document.getElementById('finalSum').innerHTML = `Output is ${ans}`;
+    }
+
+    async function calculateInterest(){
+        const principal = document.getElementById('principal').value;
+        const interest = document.getElementById('interest').value; 
+        const time = document.getElementById('time').value ; 
+
+        const response = await fetch(`http://localhost:3000/interest?principal=${principal}&rate=${interest}&time=${time}`);
+        
+        const ans = await response.text();
+        console.log(ans);
+        document.getElementById('finalOutput').innerHTML = ans ;
+    }
+  </script>
+  <body>
+    <!-- <input id="firstNumber"  type="text" placeholder="First Number" />
+    <br></br>
+    <input id="secondNumber" type="text" placeholder="Second Number" />
+    <br><br />
+    <button onclick="populatediv()">Calculate Sum</button>
+    <br></br>
+    <div id="finalSum"></div> -->
+
+    <input oninput="debouncePopulatediv()" id="principal" type="text" placeholder="Principal"> <br></br>
+    <input oninput="debouncePopulatediv()" id="interest" type="text" placeholder="Interest"> <br></br>
+    <input oninput="debouncePopulatediv()" id="time" type="text" placeholder="Time"> <br></br>
+    <!-- <button onclick="debouncePopulatediv()">Calculate Interest</button> <br></br> -->
+    <div id="finalOutput" ></div>
+  </body>
+</html>
